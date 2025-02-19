@@ -1,0 +1,25 @@
+/* resources/css/custom.css */
+table.dataTable tbody tr:hover {
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    width: 200px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #4CAF50;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #4CAF50;
+    color: #fff;
+}
