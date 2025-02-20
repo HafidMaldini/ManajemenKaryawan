@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Relasi ke tabel user (karyawan)
             $table->string('judul');
             $table->enum('status', ['Assigned', 'On Progress', 'Submited', 'Revised', 'Approved', 'On Hold']);
-            $table->enum('priority', ['Easy', 'Medium', 'High']);
+            $table->enum('priority', ['Easy', 'Medium', 'Hard']);
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->timestamps();

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('reason');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('id_manager')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
         

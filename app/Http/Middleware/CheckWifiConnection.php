@@ -17,7 +17,7 @@ class CheckWifiConnection
     public function handle(Request $request, Closure $next): Response
 {
     $allowedSSID = 'LAB ACER/5g'; // Ubah sesuai yang benar
-    $allowedMac = '4c-5e-0c-24-37-e6';
+    $allowedMac = '64-d1-54-d5-c0-a5';
 
 // Dapatkan SSID & MAC Address
 $currentSSID = trim(shell_exec("netsh wlan show interfaces | findstr SSID"));

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,7 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'team_id',
-        'role_id'
+        'role_id',
+        'status_kerja'
     ];
 
     /**
@@ -65,5 +68,15 @@ class User extends Authenticatable
         return $this->hasMany(Absen::class, 'user_id');
     }
     
+    public function getStatusKerjaAttribute($value)
+{
+    $today = Carbon::today();
+    $cuti = Cuti::where('user_id', $this->id)
+                ->where('tanggal', $today)
+                ->where('status', 'Approved')
+                ->first();
+
+    return $cuti ? 'Cuti' : $value;
+}
 }
 

@@ -11,7 +11,7 @@ class CutiController extends Controller
 {
     public function index()
     {
-        $cutis = Cuti::with('user')->get();
+        $cutis = Cuti::with('user', 'manager')->get();
         return view('index.Cuti', compact('cutis'));
     }
 
@@ -51,7 +51,7 @@ class CutiController extends Controller
             return response()->json(['message' => 'Anda tidak memiliki izin!'], 403);
         }
 
-        $cuti->update(['status' => 'Approved']);
+        $cuti->update(['status' => 'Approved', 'id_manager' => $manager->id]);
 
         return response()->json([
             'success' => true,

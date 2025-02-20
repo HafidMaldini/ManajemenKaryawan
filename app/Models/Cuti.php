@@ -18,6 +18,7 @@ class Cuti extends Model
         'tanggal',
         'reason',
         'status',
+        'id_manager',
     ];
 
     protected $dates = ['tanggal', 'deleted_at'];
@@ -28,6 +29,11 @@ class Cuti extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'id_manager');
     }
 
     /**

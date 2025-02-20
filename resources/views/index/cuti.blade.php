@@ -33,16 +33,19 @@
                     <th class="py-3 px-6 text-left">Tanggal</th>
                     <th class="py-3 px-6 text-left">Alasan</th>
                     <th class="py-3 px-6 text-left">Status</th>
+                    <th class="py-3 px-6 text-left">Manager</th>
                     <th class="py-3 px-6 text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($cutis as $item)
+                {{-- @dd($item->manager) --}}
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->user->name }}</td>
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->tanggal }}</td>
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->reason }}</td>
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->status }}</td>
+                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->manager->name }}</td>
                         <td class="py-3 px-6 text-center space-x-2">
                             @if ($item->status === 'pending' && Auth::user()->role->name === 'Manager' && Auth::user()->team->name === $item->user->team->name)
                                 <button onclick="approve({{ $item->id }})" class="text-green-500 hover:text-green-600 text-lg">

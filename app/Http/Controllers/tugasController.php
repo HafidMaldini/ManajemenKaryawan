@@ -25,7 +25,7 @@ class tugasController extends Controller
     {
         $request->validate([
             'judul' => 'required|string|max:50',
-            'priority' => 'required|string',
+            'priority' => 'required|string|max:10',
         ]);
 
         $id = Auth::user()->id;
