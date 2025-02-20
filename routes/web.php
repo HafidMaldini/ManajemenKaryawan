@@ -11,9 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('login');
-// });
+
 
 Route::get('/', function () {
     $user_id = Auth::id();

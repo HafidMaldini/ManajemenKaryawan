@@ -29,7 +29,7 @@
         <table id="cutiTable" class="min-w-full bg-white rounded-lg divide-y divide-gray-200">
             <thead class="bg-blue-100">
                 <tr class="text-gray-600 uppercase text-xs font-medium leading-normal">
-                    <th class="py-3 px-6 text-left">Nama Pegawai</th>
+                    <th class="py-3 px-6 text-left">Karyawan</th>
                     <th class="py-3 px-6 text-left">Tanggal</th>
                     <th class="py-3 px-6 text-left">Alasan</th>
                     <th class="py-3 px-6 text-left">Status</th>

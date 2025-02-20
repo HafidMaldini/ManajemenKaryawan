@@ -16,6 +16,7 @@
         <script src="{{ asset('JS/datatable.js') }}"></script>
         <script src="{{ asset('JS/swal.js') }}"></script>
         <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+        {{-- <link rel="shortcut icon" href="" type="image/x-icon"> --}}
 
         {{-- <script src="cdn.datatables.net/2.2.1/js/dataTables.min.js"></script> --}}
         <!-- Scripts -->
