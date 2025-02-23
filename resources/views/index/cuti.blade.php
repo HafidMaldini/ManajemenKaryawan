@@ -10,7 +10,7 @@
     </div>
 
     <div class="mb-4 p-4 bg-blue-100 rounded-lg">
-        <p class="text-lg font-semibold">Sisa Cuti Anda: <span class="text-blue-700">{{ Auth::user()->sisa_cuti }} hari</span></p>
+        <p class="text-lg font-semibold">Sisa Cuti Anda: <span class="text-blue-700">{{ Auth::user()->sisa_cuti }} kali</span></p>
     </div>
 
     <!-- Filter Status -->
@@ -30,7 +30,9 @@
             <thead class="bg-blue-100">
                 <tr class="text-gray-600 uppercase text-xs font-medium leading-normal">
                     <th class="py-3 px-6 text-left">Karyawan</th>
-                    <th class="py-3 px-6 text-left">Tanggal</th>
+                    <th class="py-3 px-6 text-left">Tanggal Mulai</th>
+                    <th class="py-3 px-6 text-left">Tanggal Selesai</th>
+                    <th class="py-3 px-6 text-left">Durasi</th>
                     <th class="py-3 px-6 text-left">Alasan</th>
                     <th class="py-3 px-6 text-left">Status</th>
                     <th class="py-3 px-6 text-left">Manager</th>
@@ -42,10 +44,12 @@
                 {{-- @dd($item->manager) --}}
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->user->name }}</td>
-                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->tanggal }}</td>
+                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->tanggal_mulai }}</td>
+                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->tanggal_selesai }}</td>
+                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->durasi }} Hari</td>
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->reason }}</td>
                         <td class="py-3 px-6 text-lg text-gray-900">{{ $item->status }}</td>
-                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->manager->name }}</td>
+                        <td class="py-3 px-6 text-lg text-gray-900">{{ $item->manager->name ?? '' }}</td>
                         <td class="py-3 px-6 text-center space-x-2">
                             @if ($item->status === 'pending' && Auth::user()->role->name === 'Manager' && Auth::user()->team->name === $item->user->team->name)
                                 <button onclick="approve({{ $item->id }})" class="text-green-500 hover:text-green-600 text-lg">
@@ -74,8 +78,13 @@
                     <form id="cutiForm" action="{{ route('cuti.store') }}" method="POST">
                         @csrf
                         <div class="mb-4">
-                            <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                            <input type="date" id="end_date" name="tanggal" required
+                            <label for="tanggal_mulai" class="block text-sm font-medium text-gray-700">Mulai</label>
+                            <input type="date" id="tanggal_mulai" name="tanggal_mulai" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="tanggal_selesai" class="block text-sm font-medium text-gray-700">Selesai</label>
+                            <input type="date" id="tanggal_selesai" name="tanggal_selesai" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         </div>
                         <div class="mb-4">
@@ -100,7 +109,8 @@
     const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
     const dd = String(tomorrow.getDate()).padStart(2, '0');
 
-    document.getElementById('end_date').min = `${yyyy}-${mm}-${dd}`;
+    document.getElementById('tanggal_mulai').min = `${yyyy}-${mm}-${dd}`;
+    document.getElementById('tanggal_selesai').min = `${yyyy}-${mm}-${dd}`;
         let isFetching = false;
 
 new DataTable('#cutiTable');

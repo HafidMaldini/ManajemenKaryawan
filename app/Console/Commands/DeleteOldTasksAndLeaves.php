@@ -37,12 +37,12 @@ class DeleteOldTasksAndLeaves extends Command
 
         // 2. Hapus cuti yang sudah ditolak dalam 3 hari
         $deletedRejectedLeaves = Cuti::where('status', 'Rejected')
-                                     ->where('updated_at', '<', $today->subDays(3))
+                                     ->where('updated_at', '<', $today->subDays(1))
                                      ->delete();
 
         // 3. Hapus cuti yang disetujui sehari setelah tanggal cuti selesai
         $deletedApprovedLeaves = Cuti::where('status', 'Approved')
-                                     ->where('tanggal', '<', $today->subDays(1))
+                                     ->where('tanggal_selesai', '<', $today->subDays(1))
                                      ->delete();
 
         // Log hasil pembersihan

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tugas;
 use App\Models\User;
+use App\Notifications\TugasStatusNotification;
 use Carbon\Carbon;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Auth;
@@ -14,27 +15,39 @@ class tugasController extends Controller
 {
     public function index()
     {
-        $tugas = Tugas::with(['user.role', 'user.team'])->get();
-        // dd($tugas2);
+        $tugas = Auth::user()->role->name == 'Manager'
+    ? Tugas::with(['karyawan.role', 'karyawan.team'])
+        ->where('manager_id', Auth::id())
+        ->get()
+    : Tugas::with(['karyawan.role', 'karyawan.team'])
+        ->where('karyawan_id', Auth::id())
+        ->get();
+
         $user = Auth::user();
-        
-        return view('index.task', compact('tugas', 'user'));
+        $users = User::where('role_id', 1)->where('team_id', $user->team_id)->get();
+        return view('index.task', compact('tugas', 'user', 'users'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:50',
-            'priority' => 'required|string|max:10',
+            'title' => 'required|string|max:100',
+            'karyawan_id' => 'required|exists:users,id',
+            'deadline' => 'required|date',
         ]);
+
 
         $id = Auth::user()->id;
         $tugas = Tugas::create([
-            'judul' => $request->judul,
-            'user_id' => $id,
-            'status' => 'Assigned',
+            'manager_id' => $id,
+            'karyawan_id' => $request->karyawan_id,
+            'title' => $request->title,
             'priority' => $request->priority,
+            'deadline' => $request->deadline,
+            'status' => 'Assigned',
         ]);
+
+        $tugas->karyawan->notify(new TugasStatusNotification($tugas, 'ditugaskan', Auth::user()));
 
         return response()->json([
             'success' => true,
@@ -46,14 +59,17 @@ class tugasController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string|max:20',
-            'deskripsi' => 'nullable|string',
+            'title' => 'required|string|max:100',
+            'karyawan_id' => 'required|exists:users,id',
+            'deadline' => 'required|date',
         ]);
 
         $task = Tugas::findOrFail($id);
         $task->update([
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
+            'karyawan_id' => $request->karyawan_id,
+            'title' => $request->title,
+            'priority' => $request->priority,
+            'deadline' => $request->deadline,
         ]);
 
         return response()->json([
@@ -87,7 +103,6 @@ class tugasController extends Controller
         $tugas = Tugas::findOrFail($id);
         $tugas->update([
             'status' => 'On Progress',
-            'start_date' => now('WIB'),
         ]);
 
         return response()->json([
@@ -97,13 +112,21 @@ class tugasController extends Controller
         ]);
     }
 
-    public function finish($id)
+    public function finish(Request $request, $id)
     {
         $tugas = Tugas::findOrFail($id);
-        $tugas->update([
-            'status' => 'Submited',
-            'end_date' => now('WIB'),
+
+        $request->validate([
+            'notes' => 'required|string|max:100',
         ]);
+
+        $tugas->update([
+            'notes' => $request->notes,
+            'status' => 'Submited',
+            'completed_at' => now('WIB'),
+        ]);
+
+        $tugas->manager->notify(new TugasStatusNotification($tugas, 'diselesaikan', Auth::user()));
 
         return response()->json([
             'success' => true,
@@ -116,6 +139,8 @@ class tugasController extends Controller
     {
         $tugas = Tugas::findOrFail($id);
         $tugas->update(['status' => 'Approved']);
+
+        $tugas->karyawan->notify(new TugasStatusNotification($tugas, 'disetujui', Auth::user()));
 
         return response()->json([
             'success' => true,
@@ -131,6 +156,8 @@ class tugasController extends Controller
             'status' => 'Revised',
             'end_date' => null,
         ]);
+
+        $tugas->karyawan->notify(new TugasStatusNotification($tugas, 'ditolak', Auth::user()));
 
         return response()->json([
             'success' => true,

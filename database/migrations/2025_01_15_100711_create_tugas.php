@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('tugas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Relasi ke tabel user (karyawan)
-            $table->string('judul');
-            $table->enum('status', ['Assigned', 'On Progress', 'Submited', 'Revised', 'Approved', 'On Hold']);
+            $table->foreignId('manager_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('karyawan_id')->constrained('users')->onDelete('cascade');
+            $table->string('title');
+            $table->date('deadline');
             $table->enum('priority', ['Easy', 'Medium', 'Hard']);
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date')->nullable();
+            $table->date('completed_at')->nullable();
+            $table->text('notes')->nullable();
+            $table->enum('status', ['Assigned', 'On Progress', 'Submited', 'Revised', 'Approved', 'On Hold']);
             $table->timestamps();
         });   
     }

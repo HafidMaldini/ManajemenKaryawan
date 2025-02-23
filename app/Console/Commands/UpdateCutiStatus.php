@@ -20,7 +20,7 @@ class UpdateCutiStatus extends Command
      *
      * @var string
      */
-    protected $description = 'Memperbarui status kerja karyawan berdasarkan tanggal cuti yang disetujui';
+    protected $description = 'Memperbarui status kerja karyawan berdasarkan tanggal cuti yan disetujui';
 
     /**
      * Execute the console command.
@@ -28,10 +28,8 @@ class UpdateCutiStatus extends Command
     public function handle()
     {
         $today = Carbon::today();
-        $yesterday = Carbon::yesterday(); // Kemarin
 
-        // **1. SET STATUS KERJA MENJADI "CUTI" JIKA CUTI DIMULAI HARI INI**
-        $cutisMulai = Cuti::where('tanggal', $today)
+        $cutisMulai = Cuti::where('tanggal_mulai', $today)
                           ->where('status', 'Approved')
                           ->get();
 
@@ -41,8 +39,7 @@ class UpdateCutiStatus extends Command
             $this->info("Status kerja {$user->name} diperbarui menjadi 'Cuti'.");
         }
 
-        // **2. KEMBALIKAN STATUS KERJA MENJADI "BEKERJA" JIKA CUTI KEMARIN**
-        $cutisSelesai = Cuti::where('tanggal', $yesterday) // Cuti kemarin sudah selesai
+        $cutisSelesai = Cuti::where('tanggal_selesai', '<', $today) 
                             ->where('status', 'Approved')
                             ->get();
 
@@ -55,3 +52,4 @@ class UpdateCutiStatus extends Command
         $this->info('Update status cuti selesai.');
     }
     }
+    

@@ -102,12 +102,18 @@ class RegisteredUserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        if ($user->role->name === 'Manager' && Auth::user()->role->name === 'Karyawan'){
+            return response()->json([
+                'success' => false,
+                'message' => 'Kamu tidak bisa menghapus akun yang memiliki role lebih tinggi darimu.'
+            ], 404);
+        }
 
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'User tidak ditemukan.'
-            ], 404); // 404 adalah status code untuk "Not Found"
+            ], 404);
         }
 
         $user->delete();

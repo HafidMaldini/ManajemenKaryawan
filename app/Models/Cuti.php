@@ -15,13 +15,15 @@ class Cuti extends Model
 
     protected $fillable = [
         'user_id',
-        'tanggal',
+        'tanggal_mulai',
+        'tanggal_selesai',
+        'durasi',
         'reason',
         'status',
         'id_manager',
     ];
 
-    protected $dates = ['tanggal', 'deleted_at'];
+    protected $dates = ['tanggal_mulai', 'tanggal_selesai', 'deleted_at'];
 
     /**
      * Relasi ke tabel Users

@@ -3,11 +3,13 @@
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CutiController;
+use App\Http\Controllers\NotifikasiCOntroller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\tugasController;
 use App\Models\Absen;
 use App\Models\tugas;
 use Carbon\Carbon;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +52,13 @@ Route::middleware('auth')->group(function () {
 Route::post('/cuti/store', [CutiController::class, 'store'])->name('cuti.store');
 Route::post('/cuti/approve/{id}', [CutiController::class, 'approve'])->name('cuti.approve');
 Route::post('/cuti/reject/{id}', [CutiController::class, 'reject'])->name('cuti.reject');
+Route::post('/notifications/delete/{id}', function ($id) {
+    $notification = DatabaseNotification::find($id);
+    if ($notification) {
+        $notification->delete();
+    }
+    return response()->json(['success' => true]);
+});
 });
 
 

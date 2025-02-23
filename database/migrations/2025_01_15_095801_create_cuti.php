@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             // $table->foreignId('approved_by')->constrained('role')->onDelete('cascade');
-            $table->date('tanggal');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_selesai');
+            $table->integer('durasi');
             $table->text('reason');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->foreignId('id_manager')->nullable()->constrained('users')->onDelete('cascade');

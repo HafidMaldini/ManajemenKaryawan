@@ -9,21 +9,20 @@ class Tugas extends Model
 {
     use Prunable;
     protected $fillable = [
-        'judul',
-        'priority',
-        'status',
-        'start_date',
-        'end_date',
-        'user_id',
+        'manager_id', 'karyawan_id', 'title',
+        'deadline', 'completed_at', 'notes', 'status'
     ];
 
+    public function manager() {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    public function karyawan() {
+        return $this->belongsTo(User::class, 'karyawan_id');
+    }
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
-
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 
 }

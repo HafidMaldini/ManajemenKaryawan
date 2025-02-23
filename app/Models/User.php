@@ -72,8 +72,9 @@ class User extends Authenticatable
 {
     $today = Carbon::today();
     $cuti = Cuti::where('user_id', $this->id)
-                ->where('tanggal', $today)
                 ->where('status', 'Approved')
+                ->where('tanggal_mulai', '<=', $today) // Cuti sudah dimulai
+                ->where('tanggal_selesai', '>=', $today) // Cuti belum selesai
                 ->first();
 
     return $cuti ? 'Cuti' : $value;
